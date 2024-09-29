@@ -36,7 +36,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 4: Build Docker image
-    # Paso 4: Construcción de la imagen de Docker
-    - name: Build docker image
-      run: docker build -t devops_ws --tag devops_ws_$(date +%s) .
+      # Paso 4: Construcción de la imagen de Docker
+      - name: Build docker image
+        run: docker build -t devops_ws --tag devops_ws_$(date +%s) .
