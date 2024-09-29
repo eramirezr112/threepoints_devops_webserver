@@ -10,21 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Paso 1: Checkout del repositorio
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Paso 2: Pruebas de SAST mockeadas
-    - name: Pruebas de SAST
-      run: echo "Ejecución de pruebas de SAST"
+      # Step 1: Mocked SAST tests
+      - name: Pruebas de SAST
+        run: echo "Ejecución de pruebas de SAST"
 
-    # Paso 3: Creación del archivo de credenciales
-    - name: Crear archivo de credenciales
-      run: |
-        echo "[credentials]" > credentials.ini
-        echo "username=esteban" >> credentials.ini
-        echo "password=mySecretPassword" >> credentials.ini
+      # Step 2: Create credentials.ini
+      - name: Create credentials.ini
+        run: |
+          cp credentials.ini.tpl credentials.ini
+          sed -i 's/${USERNAME}/esteban/g' credentials.ini
+          sed -i 's/${PASSWORD}/mySecretPassword/g' credentials.ini
 
+      # Step 3: Commit and push credentials.ini
+      - name: Commit and push credentials.ini
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add credentials.ini
+          git commit -m "Add generated credentials.ini"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 4: Build Docker image
     # Paso 4: Construcción de la imagen de Docker
     - name: Build docker image
       run: docker build -t devops_ws --tag devops_ws_$(date +%s) .
