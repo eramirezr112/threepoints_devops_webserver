@@ -20,17 +20,13 @@ jobs:
       - name: Pruebas de SAST
         run: echo "Ejecución de pruebas de SAST"
 
-      # Step 2: Mocked SAST tests
-      - name: Pruebas de SAST
-        run: echo "Ejecución de pruebas de SAST"
-
-      # Step 3: Create credentials file
+      # Step 2: Create credentials file
       - name: Create credentials.ini
         run: |
           cp credentials.ini.tpl credentials.ini
           sed -i 's/${USERNAME}/esteban/g' credentials.ini
           sed -i 's/${PASSWORD}/mySecretPassword/g' credentials.ini
 
-      # Step 4: Build Docker image
+      # Step 3: Build Docker image
       - name: Build docker image
         run: docker build -t devops_ws --tag devops_ws_$(date +%s) .
