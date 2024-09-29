@@ -1,9 +1,11 @@
-name: Continuous Integration for Esteban Ramirez
+name: Continuous Integration
 
 on:
   push:
     branches:
       - master
+      - 'feature*'
+      - 'hotfix*'
 
 jobs:
   build:
@@ -36,6 +38,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Paso 4: Construcción de la imagen de Docker
+      # Step 4: Build Docker image
       - name: Build docker image
         run: docker build -t devops_ws --tag devops_ws_$(date +%s) .
